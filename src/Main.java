@@ -4,9 +4,9 @@ public class Main {
     public static int bossHealth = 1100;
     public static int bossDamage = 50;
     public static String bossDefence;
-    public static int[] heroesHealth = {290, 270, 250, 230, 550, 215 };
-    public static int[] heroesDamage = {35, 25, 15, 0, 8, 12};
-    public static String[] heroesAttackType = {"Physical", "Magical", "Kinetic", "Medic", "Golem", "Lucky" };
+    public static int[] heroesHealth = {290, 260, 250, 230, 550, 215, 400};
+    public static int[] heroesDamage = {35, 25, 15, 0, 8, 12, 0};
+    public static String[] heroesAttackType = {"Physical", "Magical", "Kinetic", "Medic", "Golem", "Lucky", "Witcher"};
     public static int roundNumber = 0;
 
     public static void main(String[] args) {
@@ -17,6 +17,13 @@ public class Main {
     }
 
     public static void setHeroesHealth() {
+        int witcherIndex = -1;
+        for (int i = 0; i < heroesAttackType.length; i++) {
+            if (heroesAttackType[i].equals("Witcher")) {
+                witcherIndex = i;
+                break;
+            }
+        }
         int medicIndex = -1;
         for (int i = 0; i < heroesAttackType.length; i++) {
             if (heroesAttackType[i].equals("Medic")) {
@@ -32,6 +39,17 @@ public class Main {
                     int medicHealed = random.nextInt(50) + 1;
                     heroesHealth[i] += medicHealed;
                     System.out.println("Medic healed " + heroesAttackType[i] + " for " + medicHealed + " health!!!");
+                    break;
+                }
+            }
+        }
+
+        if (witcherIndex != -1 && heroesHealth[witcherIndex] > 0) {
+            for (int i = 0; i < heroesHealth.length; i++) {
+                if (heroesHealth[i] <= 0) {
+                    heroesHealth[i] = heroesHealth[witcherIndex];
+                    heroesHealth[witcherIndex] = 0;
+                    System.out.println("Witcher given his life " + heroesAttackType[i]);
                     break;
                 }
             }
