@@ -1,12 +1,12 @@
 import java.util.Random;
 
 public class Main {
-    public static int bossHealth = 1100;
+    public static int bossHealth = 770;
     public static int bossDamage = 50;
     public static String bossDefence;
-    public static int[] heroesHealth = {290, 260, 250, 230, 550, 215, 400};
-    public static int[] heroesDamage = {35, 25, 15, 0, 8, 12, 0};
-    public static String[] heroesAttackType = {"Physical", "Magical", "Kinetic", "Medic", "Golem", "Lucky", "Witcher"};
+    public static int[] heroesHealth = {290, 260, 250, 230, 550, 215, 400, 101};
+    public static int[] heroesDamage = {35, 25, 15, 0, 8, 12, 0, 0};
+    public static String[] heroesAttackType = {"Physical", "Magical", "Kinetic", "Medic", "Golem", "Lucky", "Witcher", "Thor"};
     public static int roundNumber = 0;
 
     public static void main(String[] args) {
@@ -81,7 +81,9 @@ public class Main {
     public static void round() {
         roundNumber++;
         chooseBossDefence();
-        bossAttacks();
+        if (!bossDefence.equals("Thor")) {
+            bossAttacks();
+        }
         setHeroesHealth();
         heroesAttacks();
         System.out.println("----------------------------------");
@@ -90,18 +92,21 @@ public class Main {
 
     public static void chooseBossDefence() {
         Random random = new Random();
-        int randomIndex = random.nextInt(heroesAttackType.length);
+        int randomIndex;
+        do {
+            randomIndex = random.nextInt(heroesAttackType.length);
+        } while (heroesAttackType[randomIndex].equals("Thor"));
         bossDefence = heroesAttackType[randomIndex];
     }
 
     ;
 
     public static void heroesAttacks() {
+        Random random = new Random();
         for (int i = 0; i < heroesHealth.length; i++) {
             if (heroesHealth[i] > 0 && bossHealth > 0) {
                 int damage = heroesDamage[i];
                 if (bossDefence == heroesAttackType[i]) {
-                    Random random = new Random();
                     int coeff = random.nextInt(9) + 2;
                     damage = damage * coeff;
                     System.out.println("Critical Damage " + heroesAttackType[i] + " " + damage);
@@ -110,6 +115,9 @@ public class Main {
                     bossHealth = 0;
                 } else {
                     bossHealth -= damage;
+                }
+                if (heroesAttackType[i].equals("Thor") && random.nextBoolean()) {
+                    System.out.println("Thor stuned is BOSS!!!");
                 }
             }
         }
